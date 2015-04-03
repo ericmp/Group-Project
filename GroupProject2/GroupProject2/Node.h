@@ -9,18 +9,14 @@ class Node
 
 public:
 	float value;
-	Node *next, *prev;
-	Node();
+	Node *next = NULL, *prev = NULL;
+	Node() {};
 	Node(float);
 	~Node();
 
 private:
 
 };
-
-Node::Node() {
-
-}
 
 Node::Node(float initial)
 {

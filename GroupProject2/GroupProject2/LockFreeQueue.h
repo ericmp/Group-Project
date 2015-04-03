@@ -7,39 +7,45 @@
 
 class LockFreeQueue
 {
-	std::atomic<Node*> head, tail;
 public:
-	LockFreeQueue();
+	LockFreeQueue() : sentinel(-1) {
+		head = &sentinel;
+		tail = &sentinel;
+	};
 	~LockFreeQueue();
 	void Enqueue(Node);
-	Node Dequeue();
+	void Dequeue();
+	std::atomic<Node> *head, *tail;
+	std::atomic<Node> sentinel;
 
 private:
 
-
 };
 
-LockFreeQueue::LockFreeQueue()
-{
-	std::atomic<Node> sentinel(-1);
-	//head.store(&sentinel);
-	//tail.store(&sentinel);
-	
-	
 
-}
 
 LockFreeQueue::~LockFreeQueue()
 {
 }
 
 void LockFreeQueue::Enqueue(Node pass) {
-	Node* temp = new Node();
-	Node eric;
-
-	if(head.compare_exchange_strong(temp->next, temp));
+	
+	Node *temp;
+	temp = &tail->load();
 
 	
-	
-		
+	while (true) {
+		temp = &tail->load();
+
+		//The compare on the last node succeeds, and there wasn't an enqueue that happened during this one
+		if (tail->compare_exchange_strong(*temp->next, pass))
+			break;
+		else
+			//The compare failed, and there was an enqueue that happened during this one...so let's try again!
+			;
+	}
+}
+
+void LockFreeQueue::Dequeue() {
+
 }
