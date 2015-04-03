@@ -8,6 +8,7 @@
 int main()
 {
 	LockFreeQueue eric;
+	eric.Dequeue();
 	//if (eric.sentinel.load().next == NULL)
 	//	std::cout << eric.sentinel.load().value;
 	//eric.Dequeue();

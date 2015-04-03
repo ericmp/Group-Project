@@ -30,19 +30,14 @@ LockFreeQueue::~LockFreeQueue()
 
 void LockFreeQueue::Enqueue(Node pass) {
 	
-	Node *temp;
-	temp = &tail->load();
-
+	Node *temp = new Node();
 	
 	while (true) {
 		temp = &tail->load();
 
-		//The compare on the last node succeeds, and there wasn't an enqueue that happened during this one
 		if (tail->compare_exchange_strong(*temp->next, pass))
+			//The first compare succeeds, and there wasn't an enqueue that happened during this one. Otherwise, the compare failed, and there was an enqueue that happened during this one...so let's try again!
 			break;
-		else
-			//The compare failed, and there was an enqueue that happened during this one...so let's try again!
-			;
 	}
 }
 
