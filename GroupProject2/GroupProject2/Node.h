@@ -9,7 +9,7 @@ class Node
 
 public:
 	float value;
-	Node *next = NULL, *prev = NULL;
+	Node *next = NULL;
 	Node() {};
 	Node(float);
 	~Node();
