@@ -85,8 +85,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LockFreeQueue.h" />
-    <ClInclude Include="Node.h" />
-    <ClInclude Include="NodePtr.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

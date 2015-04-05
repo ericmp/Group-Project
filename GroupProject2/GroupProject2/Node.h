@@ -9,7 +9,7 @@ class Node
 
 public:
 	float value;
-	Node *next = NULL;
+	std::atomic<Node*> next;
 	Node() {};
 	Node(float);
 	~Node();

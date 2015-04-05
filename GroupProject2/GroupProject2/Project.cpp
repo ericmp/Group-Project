@@ -8,8 +8,8 @@
 int main()
 {
 	LockFreeQueue eric;
-	Node i(5);
-	eric.Enqueue(i);
+	eric.Enqueue(5);
+	eric.Enqueue(7);
 	//std::cout << eric.tail->load().value;
 	//if (eric.sentinel.load().next == NULL)
 	//	std::cout << eric.sentinel.load().value;
