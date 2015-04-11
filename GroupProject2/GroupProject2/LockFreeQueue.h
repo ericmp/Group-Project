@@ -29,7 +29,7 @@ public:
 	};
 	~LockFreeQueue();
 	void Enqueue(float);
-	void Dequeue();
+	void Dequeue(std::shared_ptr<int> p);
 	std::atomic<Node*> head, tail;
 	Node sentinel;
 
@@ -46,32 +46,31 @@ LockFreeQueue::~LockFreeQueue()
 void LockFreeQueue::Enqueue(float value) {
 	
 	Node *temp = new Node();
-	Node *lastTmp = new Node();
+	Node *lastTmp = new Node();	
 
-	
 	do {
-		std::memcpy(lastTmp, tail, sizeof(Node));
+		lastTmp = tail.load();;
 		temp = lastTmp->next.load();
 	} while (!std::atomic_compare_exchange_strong(&tail.load()->next, &temp, new Node(value)));
 		//The first compare succeeds, and there wasn't an enqueue that happened during this one. 
 		//Otherwise, the compare failed, and there was an enqueue that happened during this one...so let's try again!
 	
-
-	std::atomic<Node*> *ptr = &tail;
-	
-	//std::atomic_compare_exchange_weak(&tail, &lastTmp, tail.load()->next.load());
+	if (std::atomic_compare_exchange_weak(&tail, &lastTmp, tail.load()->next.load()));
 	//make the tail point to what we just enqueued, otherwise don't do anything
 		
 		//Check for hanging tail
 		//while (tail.load()->next.load() != NULL)
 		//	tail = tail.load()->next.load();
 
-	delete(temp);	
-	delete(lastTmp);
+//	delete(temp);	
+	//delete(lastTmp);
 }
 
-void LockFreeQueue::Dequeue() {
-	//std::
+void LockFreeQueue::Dequeue(std::shared_ptr<int> p) {
+
+	//std::shared_ptr<Node> eric = std::make_shared<Node>();
+	std::cout << p.get();
+
 
 
 

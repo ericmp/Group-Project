@@ -1,13 +1,12 @@
-﻿Build started 4/10/2015 8:11:12 PM.
-     1>Project "D:\Users\Eric\OneDrive\School\2015\Spring\Parallel Processing\GroupProject2\GroupProject2\GroupProject2.vcxproj" on node 2 (Build target(s)).
+﻿Build started 4/11/2015 1:52:17 PM.
+     1>Project "C:\Users\Eric\OneDrive\School\2015\Spring\Parallel Processing\GroupProject2\GroupProject2\GroupProject2.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"D:\Users\Eric\OneDrive\School\2015\Spring\Parallel Processing\GroupProject2\packages\pthreads.2.9.1.4\build\native\../..//build/native/include/" /ZI /nologo /W3 /WX- /Od /Oy- /D HAS_PTHREAD /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Project.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\Eric\OneDrive\School\2015\Spring\Parallel Processing\GroupProject2\packages\pthreads.2.9.1.4\build\native\../..//build/native/include/" /ZI /nologo /W3 /WX- /Od /Oy- /D HAS_PTHREAD /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Project.cpp
          Project.cpp
-       Link:
-         D:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\Users\Eric\OneDrive\School\2015\Spring\Parallel Processing\GroupProject2\Debug\GroupProject2.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\Users\Eric\OneDrive\School\2015\Spring\Parallel Processing\GroupProject2\Debug\GroupProject2.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\Users\Eric\OneDrive\School\2015\Spring\Parallel Processing\GroupProject2\Debug\GroupProject2.lib" /MACHINE:X86 Debug\Project.obj
-         GroupProject2.vcxproj -> D:\Users\Eric\OneDrive\School\2015\Spring\Parallel Processing\GroupProject2\Debug\GroupProject2.exe
-     1>Done Building Project "D:\Users\Eric\OneDrive\School\2015\Spring\Parallel Processing\GroupProject2\GroupProject2\GroupProject2.vcxproj" (Build target(s)).
+     1>c:\users\eric\onedrive\school\2015\spring\parallel processing\groupproject2\groupproject2\lockfreequeue.h(67): warning C4390: ';' : empty controlled statement found; is this the intent?
+     1>c:\users\eric\onedrive\school\2015\spring\parallel processing\groupproject2\groupproject2\project.cpp(16): error C3867: 'LockFreeQueue::Dequeue': function call missing argument list; use '&LockFreeQueue::Dequeue' to create a pointer to member
+     1>Done Building Project "C:\Users\Eric\OneDrive\School\2015\Spring\Parallel Processing\GroupProject2\GroupProject2\GroupProject2.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:00.72
+Time Elapsed 00:00:01.00
