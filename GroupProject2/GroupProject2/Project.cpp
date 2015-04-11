@@ -10,7 +10,7 @@ int main()
 	LockFreeQueue eric;
 	eric.Enqueue(5);
 	eric.Enqueue(7);
-	//std::cout << eric.tail->load().value;
+	//eric.Dequeue();
 	//if (eric.sentinel.load().next == NULL)
 	//	std::cout << eric.sentinel.load().value;
 	//eric.Dequeue();
