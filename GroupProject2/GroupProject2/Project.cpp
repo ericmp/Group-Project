@@ -11,7 +11,7 @@ int main()
 {
 	LockFreeQueue eric;
 	eric.Enqueue(5);
-	std::cout << eric.tail.load()->value;
+	//std::cout << eric.tail.load()->value;
 	//eric.Enqueue(7);
 
 	/*
