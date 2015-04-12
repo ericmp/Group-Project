@@ -5,18 +5,18 @@
 #include <limits.h>
 #include <memory>
 
-
+#define botHalf 0xFFFFFFFF;
+#define topHalf 0xFFFFFFFF00000000;
 
 struct Node {
-	float value;
+	long long int value;
 	std::atomic<Node *> next;
 	Node() {};
-	Node(float initial) : value(initial) {}
+	Node(long long int initial) : value(initial) {}
 	~Node() { delete next.load(); }
 
 
 };
-
 
 
 
@@ -28,10 +28,11 @@ public:
 		tail.store(&sentinel);
 	};
 	~LockFreeQueue();
-	void Enqueue(float);
-	void Dequeue(std::shared_ptr<int> p);
+	void Enqueue(long long int);
+	int Dequeue();
 	std::atomic<Node*> head, tail;
 	Node sentinel;
+	long int count = 0x1;
 
 private:
 
@@ -43,35 +44,50 @@ LockFreeQueue::~LockFreeQueue()
 {
 }
 
-void LockFreeQueue::Enqueue(float value) {
+void LockFreeQueue::Enqueue(long long int value) {
 	
-	Node *temp = new Node();
-	Node *lastTmp = new Node();	
+	Node *temp;
+	Node lastTmp;
+
+
+
+
+	//NEED TO PUT AN IF STATEMENT HERE THAT CHECKS IF THE ENITRE THING IS EMPTY OR NOT. USE COMPARE AND EXCHANGE TO CHECK
 
 	do {
-		lastTmp = tail.load();;
-		temp = lastTmp->next.load();
-	} while (!std::atomic_compare_exchange_strong(&tail.load()->next, &temp, new Node(value)));
+		memcpy(&lastTmp, tail.load(), sizeof(Node));
+		temp = &lastTmp;
+	} while (!std::atomic_compare_exchange_strong(&tail.load()->next, &temp, new Node(value | (count++ << 32))));
 		//The first compare succeeds, and there wasn't an enqueue that happened during this one. 
 		//Otherwise, the compare failed, and there was an enqueue that happened during this one...so let's try again!
+
+
 	
-	if (std::atomic_compare_exchange_weak(&tail, &lastTmp, tail.load()->next.load()));
+	/*
+	memcpy(lastTmp, tail.load(), sizeof(Node));
+
+	if (std::atomic_compare_exchange_weak(tail.load(), lastTmp, tail.load()->next.load()))
+		;
 	//make the tail point to what we just enqueued, otherwise don't do anything
 		
-		//Check for hanging tail
-		//while (tail.load()->next.load() != NULL)
-		//	tail = tail.load()->next.load();
+	//Check for hanging tail
+	//while (tail.load()->next.load() != NULL)
+	//	tail = tail.load()->next.load();
 
-//	delete(temp);	
+	delete(temp);
 	//delete(lastTmp);
+	*/
 }
 
-void LockFreeQueue::Dequeue(std::shared_ptr<int> p) {
+int LockFreeQueue::Dequeue() {
 
-	//std::shared_ptr<Node> eric = std::make_shared<Node>();
-	std::cout << p.get();
+	long long int tmp = head.load()->next.load()->value;
+
+	int node_val = tmp & botHalf;
+	int node_safebits = tmp & topHalf;
+	std::cout << count;
 
 
-
+	return tmp;
 
 }
