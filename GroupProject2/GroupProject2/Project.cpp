@@ -11,26 +11,27 @@
 #include <vector>
 
 
-using namespace std;
-
 struct NodeThread {
 
-};
-
-struct GraphNode {
-	vector<GraphEdge> neighbors;
 };
 
 struct GraphEdge {
 	int ID;
 	int weight;
+	GraphEdge() {};
 	GraphEdge(int a, int b) : ID(a), weight(b) {};
 };
+
+struct GraphNode {
+	std::vector<GraphEdge> neighbors;
+	GraphNode() { neighbors.resize(10); }
+};
+
 
 
 int main()
 {
-	ifstream input;
+	std::ifstream input;
 	int numNodes, numEdges, edge1, edge2, weight;
 
 
@@ -43,12 +44,26 @@ int main()
 	GraphNode* nodes = new GraphNode[numNodes];
 
 	//Place all nodes in the array
-	while (input >> edge1 >> edge2 >> weight) {
+//	while (input >> edge1 >> edge2 >> weight) {
+	input >> edge1 >> edge2 >> weight;
+	GraphNode first = nodes[edge1];
+	GraphNode second = nodes[edge2];
+	
 		GraphEdge temp1(edge2, weight), temp2(edge1, weight);
-		nodes[edge1].neighbors.push_back(temp1);
-		nodes[edge2].neighbors.push_back(temp2);
-	}
+		
+		if (first.neighbors.size() == first.neighbors.capacity()) {
+			first.neighbors.resize(first.neighbors.size() + 10);
+		}
+		if (second.neighbors.size() == second.neighbors.capacity()) {
+			second.neighbors.resize(second.neighbors.size() + 10);
+		}
 
+		first.neighbors.push_back(temp1);
+		second.neighbors.push_back(temp2);
+		std::cout << nodes[5].neighbors[0].ID;
+		
+	//}
+	
 
 
 	getchar();
