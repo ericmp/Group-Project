@@ -8,10 +8,16 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <list>
 #include <vector>
 
 
 struct NodeThread {
+
+};
+
+struct TableEntry {
+	int currLowestValue = 0;
 
 };
 
@@ -23,9 +29,21 @@ struct GraphEdge {
 };
 
 struct GraphNode {
-	std::vector<GraphEdge> neighbors;
-	GraphNode() { neighbors.resize(10); }
+	int name = -1;
+	std::list<GraphEdge> neighbors;
+	GraphNode() {}
+	void Place(GraphEdge a) { neighbors.push_back(a); }
 };
+
+
+struct lessThanNeighbor
+{
+	inline bool operator() (const GraphEdge& struct1, const GraphEdge& struct2)
+	{
+		return (struct1.weight > struct2.weight);
+	}
+};
+
 
 
 
@@ -41,29 +59,23 @@ int main()
 	//Get number of nodes and number of edges
 	input >> numNodes >> numEdges;
 
-	GraphNode* nodes = new GraphNode[numNodes];
+	std::vector<GraphNode> nodes(numNodes);
 
 	//Place all nodes in the array
-//	while (input >> edge1 >> edge2 >> weight) {
-	input >> edge1 >> edge2 >> weight;
-	GraphNode first = nodes[edge1];
-	GraphNode second = nodes[edge2];
-	
+	while (input >> edge1 >> edge2 >> weight) {
+		//Get the next set of nodes and edge
 		GraphEdge temp1(edge2, weight), temp2(edge1, weight);
-		
-		if (first.neighbors.size() == first.neighbors.capacity()) {
-			first.neighbors.resize(first.neighbors.size() + 10);
-		}
-		if (second.neighbors.size() == second.neighbors.capacity()) {
-			second.neighbors.resize(second.neighbors.size() + 10);
-		}
 
-		first.neighbors.push_back(temp1);
-		second.neighbors.push_back(temp2);
-		std::cout << nodes[5].neighbors[0].ID;
-		
-	//}
-	
+		nodes[edge1].Place(temp1);
+		nodes[edge2].Place(temp2);
+	}
+
+	//Sort each node, except for those where there is no value
+	for each (GraphNode x in nodes)
+		if (x.name != -1)
+			x.neighbors.sort(lessThanNeighbor());
+
+	//At this point, we have a vector of graphs, who each have a list of neighbors sorted from least distance to greatest distance
 
 
 	getchar();
