@@ -1,0 +1,36 @@
+﻿
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Your branch is behind 'origin/master' by 4 commits, and can be fast-forwarded.
+#   (use "git pull" to update your local branch)
+#
+# Changes to be committed:
+#	modified:   GroupProject2/Debug/GroupProject2.exe
+#	modified:   GroupProject2/Debug/GroupProject2.ilk
+#	modified:   GroupProject2/Debug/GroupProject2.pdb
+#	modified:   GroupProject2/GroupProject2.sdf
+#	modified:   GroupProject2/GroupProject2.v12.suo
+#	modified:   GroupProject2/GroupProject2/Debug/GroupProject2.log
+#	modified:   GroupProject2/GroupProject2/Debug/GroupProject2.tlog/CL.read.1.tlog
+#	modified:   GroupProject2/GroupProject2/Debug/GroupProject2.tlog/CL.write.1.tlog
+#	modified:   GroupProject2/GroupProject2/Debug/GroupProject2.tlog/GroupProject2.lastbuildstate
+#	modified:   GroupProject2/GroupProject2/Debug/GroupProject2.tlog/link.command.1.tlog
+#	modified:   GroupProject2/GroupProject2/Debug/GroupProject2.tlog/link.read.1.tlog
+#	modified:   GroupProject2/GroupProject2/Debug/GroupProject2.tlog/link.write.1.tlog
+#	modified:   GroupProject2/GroupProject2/Debug/Project.obj
+#	modified:   GroupProject2/GroupProject2/Debug/vc120.idb
+#	modified:   GroupProject2/GroupProject2/Debug/vc120.pdb
+#	new file:   GroupProject2/GroupProject2/LockFreeQueue-Eric-Surface.h
+#	modified:   GroupProject2/GroupProject2/LockFreeQueue.h
+#	modified:   GroupProject2/GroupProject2/Project.cpp
+#	new file:   GroupProject2/GroupProject2/input.txt
+#
+# Changes not staged for commit:
+#	deleted:    GroupProject2/GroupProject2-Eric-Surface.sdf
+#	deleted:    GroupProject2/GroupProject2.v12-Eric-Surface.suo
+#	deleted:    GroupProject2/different.txt
+#	deleted:    GroupProject2/externalpointers.txt
+#	deleted:    GroupProject2/internalpointers.txt
+#
+
