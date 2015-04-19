@@ -1,5 +1,4 @@
 #include "LockFreeQueue.h"
-<<<<<<< HEAD
 #include <pthread.h>
 #include <thread>
 #include <iomanip>
@@ -51,8 +50,13 @@ void solvePath() {
 //	std::mem_fn(&std::thread::join);
 	//std::cout << &std::thread::joinable;
 
-	/*
+	
 	queue.Dequeue(*node.deqNode);
+
+
+	//if your current value is greater than or equal to the table entry, or you have no neighbors, the thread can exit
+	if ((table[node.deqNode->name].currLowestValue.load() >= 0) || !nodes[node.deqNode->name].filled)
+		std::mem_fn(&std::thread::join);
 
 	//if the value is less than the current value in the table (or the table value hasn't been altered yet), set your current value as the new table entry
 	if ((table[node.deqNode->name].currLowestValue.load() < 0) || table[node.deqNode->name].currLowestValue.load() > (int)node.deqNode->currLength) {
@@ -61,10 +65,15 @@ void solvePath() {
 		if (node.deqNode->name == target)
 			std::mem_fn(&std::thread::join);
 	}
-	//if your current value is greater than or equal to the table entry, or you have no neighbors, the thread can exit
-	if ((table[node.deqNode->name].currLowestValue.load() >= 0) || !nodes[node.deqNode->name].filled)
-		std::mem_fn(&std::thread::join);
-		*/
+	for each (GraphEdge x in nodes[node.deqNode->name].neighbors) {
+		if (x.ID != "0")
+		queue.Enqueue(x.ID, x.weight + node.deqNode->currLength);
+	}
+
+
+
+
+	std::cout << queue.tail.load()->node.load()->currLength;
 	//NEED TO ALSO STORE/UPDATE PATH. DO LATER
 
 
@@ -141,38 +150,5 @@ int main()
 	getchar();
 
 	
-=======
-#include <stdio.h>
-#include <stdlib.h>
-#include <pthread.h>
-#include <thread>
-#include <iomanip>
-
-
-
-int main()
-{
-	LockFreeQueue eric;
-	eric.Enqueue(5);
-	std::cout << eric.tail.load()->value;
-	//eric.Enqueue(7);
-
-	/*
-	int b = 2;
-	int* a = &b;;
-	std::cout << &b << std::endl;
-	std::cout << a << std::endl;
-	std::cout << &a << std::endl;
-	*(++a);
-	std::cout << &a << std::endl;
-	std::cout << a << std::endl;
-	*/
-	//int a = eric.Dequeue();
-
-	//if (eric.sentinel.load().next == NULL)
-	//	std::cout << eric.sentinel.load().value;
-	//eric.Dequeue();
-	getchar();
->>>>>>> origin/master
 	return 0;
 }
