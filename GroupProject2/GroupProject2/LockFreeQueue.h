@@ -15,9 +15,10 @@ struct ReturnNode {
 	int name;
 	long long int currLength;
 	bool sentinel;
+	int pathCount = 0;
 
-	ReturnNode() {};
-	ReturnNode(int pass, long long int value, bool isSentinel) : name(pass), currLength(value), sentinel(isSentinel) {};
+	ReturnNode() { pathCount = 0; };
+	ReturnNode(int pass, long long int value, bool isSentinel) : name(pass), currLength(value), sentinel(isSentinel) {pathCount++; }
 
 };
 
@@ -43,7 +44,7 @@ public:
 	};
 	~LockFreeQueue();
 	void Enqueue(const std::string,const int);
-	void Dequeue(ReturnNode &pass);
+	bool Dequeue(ReturnNode &pass);
 	std::atomic<QueueNode*> head, tail;
 	long long int count;
 
@@ -83,23 +84,24 @@ void LockFreeQueue::Enqueue(const std::string name, const int value) {
 	
 }
 
-void LockFreeQueue::Dequeue(ReturnNode &pass) {
+bool LockFreeQueue::Dequeue(ReturnNode &pass) {
 
-	QueueNode *tmpHold;
+	std::atomic<ReturnNode> tmpNode;
+
 
 	//check if the queue is empty
 	if (head.load()->next.load() != NULL){
-		//Atomic swap the value of next with a -1, as it will become the new sentinel. also, pass the value onto the calling thread
-		memcpy(&pass, head.load()->next.load()->node.exchange(new ReturnNode(-1, -1, true)), sizeof(ReturnNode));
-		//Advances the head pointer
-		while (!head.compare_exchange_weak(tmpHold, head.load()->next));
+			tmpNode.store(*head.load()->next.load()->node.load());
+			if (tmpNode.load().name > 0) {
+				memcpy(&pass, &tmpNode.load(), sizeof(ReturnNode));
+				head.store(head.load()->next);
+				return true;
+			}
+
+		//ABA IS NOT SOLVED, COME BACK TO THIS LATER
+
 	}
-	//ABA IS NOT SOLVED, COME BACK TO THIS LATER
 
-	free(tmpHold->node);
-	free(tmpHold);
-
-	//int node_val = tmp & botHalf;
-	//int node_safebits = tmp & topHalf;
+	return false;
 
 }
