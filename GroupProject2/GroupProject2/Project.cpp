@@ -28,7 +28,11 @@ struct Node {
 };
 
 struct Thread {
-	ReturnNode *deqNode = new ReturnNode(-1, -1, true);
+	ReturnNode *deqNode;
+
+	Thread() {
+		deqNode = new ReturnNode(-1, -1, true);
+	}
 };
 
 struct TableEntry {
@@ -47,13 +51,13 @@ LockFreeQueue queue;
 int start, end;
 std::vector<Node> nodes;
 std::list<std::thread*> threads;
+std::atomic<int> count(0);
+HANDLE mainThread;
 
 void solvePath() {
 	//variables are local for each thread
 	Thread node;
-	//	std::mem_fn(&std::thread::join);
-	//std::cout << &std::thread::joinable;
-
+	int a = 0;
 
 	if (queue.Dequeue(*node.deqNode)) {
 	
@@ -62,12 +66,16 @@ void solvePath() {
 			if ((table[node.deqNode->name].currLowestValue.load() <= 0) || (table[node.deqNode->name].currLowestValue.load() > (int)node.deqNode->currLength)) {
 				//Update the table entry value witht the current shortest route
 				table[node.deqNode->name].currLowestValue.store((int)node.deqNode->currLength);
-				//Update the path with the new path //NEED TO DO THIS ATOMICALLY!!!!! COMBINE CURRLENGTH AND PATH INTO STRUCT?
-				//table[node.deqNode->name].path.assign(node.deqNode->path);
+
 
 				//if your node was the target node or has no neighbors, the thread can exit
-				if (node.deqNode->name == end || !nodes[node.deqNode->name].filled)
-					std::mem_fn(&std::thread::join);
+				if (node.deqNode->name == end || !nodes[node.deqNode->name].filled) {
+					count.fetch_sub(1);
+					if (count.compare_exchange_strong(a, count)) {
+						std::mem_fn(&std::thread::join);
+						ResumeThread(mainThread);
+					}
+				}
 
 				else {
 					//Spawn new threads for each neighbor that will be enqueued
@@ -75,24 +83,34 @@ void solvePath() {
 						if (x.ID != std::to_string(start)) {
 						//Enqueue the neighbors and spawn threads for each neighbor
 						queue.Enqueue(x.ID, x.weight + node.deqNode->currLength);
+						count.fetch_add(1);
 						threads.push_back(new std::thread{ solvePath });
 						}
 				}
 			}
 
 			//if your current value is greater than or equal to the table entry, or the node has no neighbors then the thread can exit
-			else if (table[node.deqNode->name].currLowestValue.load() <= (int)node.deqNode->currLength || !nodes[node.deqNode->name].filled)
-				std::mem_fn(&std::thread::join);
+			else if (table[node.deqNode->name].currLowestValue.load() <= (int)node.deqNode->currLength || !nodes[node.deqNode->name].filled) {
+				count.fetch_sub(1);
+				if (count.compare_exchange_strong(a, count)) {
+					std::mem_fn(&std::thread::join);
+					ResumeThread(mainThread);
+				}
+			}
 
 		}
-	else
+	else {
+		count.fetch_add(1);
 		threads.push_back(new std::thread{ solvePath });
 
+	}
 
-
+	count.fetch_sub(1);
+	if (count.compare_exchange_strong(a, count)) {
+		std::mem_fn(&std::thread::join);
+		ResumeThread(mainThread);
+	}
 }
-
-
 
 
 struct lessThanNeighbor
@@ -148,16 +166,18 @@ int main()
 	for each (GraphEdge x in nodes[start].neighbors) {
 		queue.Enqueue(x.ID, x.weight);
 		//Spawn threads for each neighbor
+		count.fetch_add(1);
 		threads.push_back(new std::thread{ solvePath });
 	}
 
-	std::this_thread::sleep_for(std::chrono::seconds(5));
+	mainThread = OpenThread(THREAD_ALL_ACCESS, FALSE, GetCurrentThreadId());
+	SuspendThread(mainThread);
 
 	if (table[end].currLowestValue.load() < 0)
 		std::cout << "Sorry, there is no path between the start and finish nodes.";
 	else {
-		std::cout << "The shortest length between the start node and finish node is: " << table[end].currLowestValue << "." << std::endl;
-		std::cout << "The path is as follows: " << table[end].path <<std::endl;
+		std::cout << "The shortest length between the start node and finish node is: " << table[end].currLowestValue << std::endl;
+		//std::cout << "The path is as follows: " << table[end].path <<std::endl;
 	}
 
 

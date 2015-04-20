@@ -18,7 +18,7 @@ struct ReturnNode {
 	int pathCount = 0;
 
 	ReturnNode() { pathCount = 0; };
-	ReturnNode(int pass, long long int value, bool isSentinel) : name(pass), currLength(value), sentinel(isSentinel) {pathCount++; }
+	ReturnNode(int pass, long long int value, bool isSentinel) : name(pass), currLength(value), sentinel(isSentinel) {  pathCount++; }
 
 };
 
