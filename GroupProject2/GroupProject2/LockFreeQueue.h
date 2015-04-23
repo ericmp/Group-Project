@@ -4,12 +4,11 @@
 #include <stdlib.h>
 #include <limits.h>
 #include <memory>
-#include <list>
-#include <string>
 
 #define botHalf 0xFFFFFFFF;
 #define topHalf 0xFFFFFFFF00000000;
 
+<<<<<<< HEAD
 
 struct ReturnNode {
 	int name;
@@ -29,6 +28,15 @@ struct QueueNode {
 	std::atomic<ReturnNode*> node;
 	QueueNode() { here = this;};
 	QueueNode(int pass, long long int initial, bool isSentinel) { node.store(new ReturnNode(pass, initial, isSentinel));  here = this; }
+=======
+struct Node {
+	long long int value;
+	std::atomic<Node *> next;
+	Node* here;
+	Node() {};
+	Node(long long int initial) : value(initial) { here = this; }
+	~Node() { delete next.load(); }
+>>>>>>> parent of 27decdf... a
 };
 
 
@@ -37,16 +45,27 @@ class LockFreeQueue
 {
 public:
 	LockFreeQueue() {
+<<<<<<< HEAD
 		count = 0x1;
 		QueueNode* sentinel = new QueueNode(-1, -1, true);
+=======
+		Node* sentinel = new Node(-1);
+>>>>>>> parent of 27decdf... a
 		head.store(sentinel);
 		tail.store(sentinel);
 	};
 	~LockFreeQueue();
+<<<<<<< HEAD
 	void Enqueue(const std::string,const int);
 	bool Dequeue(ReturnNode &pass);
 	std::atomic<QueueNode*> head, tail;
 	long long int count;
+=======
+	void Enqueue(long long int);
+	int Dequeue();
+	std::atomic<Node*> head, tail;
+	long long int count = 0x1;
+>>>>>>> parent of 27decdf... a
 
 private:
 
@@ -58,16 +77,29 @@ LockFreeQueue::~LockFreeQueue()
 {
 }
 
+<<<<<<< HEAD
 void LockFreeQueue::Enqueue(const std::string name, const int value) {
 	
 	QueueNode lastTmp, *temp;
 
+=======
+void LockFreeQueue::Enqueue(long long int value) {
+
+	Node lastTmp, *temp;
+
+
+	//NEED TO PUT AN IF STATEMENT HERE THAT CHECKS IF THE ENITRE THING IS EMPTY OR NOT. USE COMPARE AND EXCHANGE TO CHECK
+>>>>>>> parent of 27decdf... a
 
 	do {
 		memcpy(&lastTmp, tail.load(), sizeof(QueueNode));
 		temp = lastTmp.next.load();
+<<<<<<< HEAD
 	} while (!std::atomic_compare_exchange_strong(&tail.load()->next, &temp, new QueueNode(std::stoi(name), value, false)));
 	//} while (!std::atomic_compare_exchange_strong(&tail.load()->next, &temp, new QueueNode(std::stoi(name), (value | (count++ << 32)), false)));
+=======
+	} while (!std::atomic_compare_exchange_strong(&tail.load()->next, &temp, new Node(value | (count++ << 32))));
+>>>>>>> parent of 27decdf... a
 	//The first compare succeeds, and there wasn't an enqueue that happened during this one. 
 	//Otherwise, the compare failed, and there was an enqueue that happened during this one...so let's try again!
 	
@@ -81,9 +113,9 @@ void LockFreeQueue::Enqueue(const std::string name, const int value) {
 		tail = tail.load()->next.load();
 
 	delete(temp);
-	
 }
 
+<<<<<<< HEAD
 bool LockFreeQueue::Dequeue(ReturnNode &pass) {
 
 	std::atomic<ReturnNode> tmpNode;
@@ -103,5 +135,26 @@ bool LockFreeQueue::Dequeue(ReturnNode &pass) {
 	}
 
 	return false;
+=======
+int LockFreeQueue::Dequeue() {
+
+	Node *tmpHold = new Node();
+	std::atomic<long long int> tmpNum = -1;
+
+	//swap the values in
+	head.load()->next.load()->value = tmpNum.exchange(head.load()->next.load()->value);
+	
+	//Switch head to the new sentinel node. ABA is solved here thanks to reference bits that we have in the upper bits of the 64 bit int
+	while(!head.compare_exchange_weak(tmpHold, head.load()->next));
+
+	free(tmpHold);
+
+
+	//int node_val = tmp & botHalf;
+	//int node_safebits = tmp & topHalf;
+
+
+	return tmpNum;
+>>>>>>> parent of 27decdf... a
 
 }

@@ -1,8 +1,20 @@
 #include "LockFreeQueue.h"
+<<<<<<< HEAD
+=======
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+>>>>>>> parent of 27decdf... a
 #include <thread>
 #include <iomanip>
 #include <bitset>
+#include <iostream>
 #include <fstream>
+<<<<<<< HEAD
+=======
+#include <string>
+#include <list>
+>>>>>>> parent of 27decdf... a
 #include <vector>
 #include <iostream>
 #include <list>
@@ -11,6 +23,7 @@
 #include <strsafe.h>
 
 
+<<<<<<< HEAD
 
 struct GraphEdge {
 	std::string ID;
@@ -19,6 +32,9 @@ struct GraphEdge {
 	GraphEdge(int a, int b) : ID(std::to_string(a)), weight(b) {};
 };
 
+=======
+struct NodeThread {
+>>>>>>> parent of 27decdf... a
 
 struct Node {
 	std::string name;
@@ -32,6 +48,7 @@ struct Thread {
 };
 
 struct TableEntry {
+<<<<<<< HEAD
 	std::atomic<int> currLowestValue;
 	std::string path;
 	TableEntry() { currLowestValue.store(-1); };
@@ -41,6 +58,25 @@ struct TableEntry {
 TableEntry::TableEntry(const TableEntry& origin) {
 	currLowestValue.store(-2);
 }
+=======
+	int currLowestValue = 0;
+
+};
+
+struct GraphEdge {
+	int ID;
+	int weight;
+	GraphEdge() {};
+	GraphEdge(int a, int b) : ID(a), weight(b) {};
+};
+
+struct GraphNode {
+	int name = -1;
+	std::list<GraphEdge> neighbors;
+	GraphNode() {}
+	void Place(GraphEdge a) { neighbors.push_back(a); }
+};
+>>>>>>> parent of 27decdf... a
 
 TableEntry *table;
 LockFreeQueue queue;
@@ -89,11 +125,14 @@ void solvePath() {
 		threads.push_back(new std::thread{ solvePath });
 
 
+<<<<<<< HEAD
 
 }
 
 
 
+=======
+>>>>>>> parent of 27decdf... a
 
 struct lessThanNeighbor
 {
@@ -117,21 +156,30 @@ int main()
 	input >> numNodes >> numEdges;
 	input >> start >> end;
 
+<<<<<<< HEAD
 	//Create an atomic table for the lowest weight value entries
 	table = new TableEntry[numNodes + 1];
 
 	nodes.resize(numNodes + 1);
 
+=======
+	std::vector<GraphNode> nodes(numNodes);
+>>>>>>> parent of 27decdf... a
 
 	//Place all nodes in the array
 	while (input >> edge1 >> edge2 >> weight) {
 		//Get the next set of nodes and edge
 		GraphEdge temp1(edge2, weight), temp2(edge1, weight);
+<<<<<<< HEAD
+=======
+
+>>>>>>> parent of 27decdf... a
 		nodes[edge1].Place(temp1);
 		nodes[edge2].Place(temp2);
 	}
 
 	//Sort each node, except for those where there is no value
+<<<<<<< HEAD
 	for (int i = 0; i < nodes.size(); i++) {
 		nodes[i].name = std::to_string(i);
 		table[i].path = std::to_string(i);
@@ -160,6 +208,14 @@ int main()
 		std::cout << "The path is as follows: " << table[end].path <<std::endl;
 	}
 
+=======
+	for each (GraphNode x in nodes)
+		if (x.name != -1)
+			x.neighbors.sort(lessThanNeighbor());
+
+	//At this point, we have a vector of graphs, who each have a list of neighbors sorted from least distance to greatest distance
+
+>>>>>>> parent of 27decdf... a
 
 	getchar();
 
